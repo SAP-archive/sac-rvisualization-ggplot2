@@ -1,0 +1,35 @@
+# Discription:
+# Function which simulates log returns of a stock price from a t distribution
+# 
+# Requirements: 
+# df = Degrees of Freedom of the t distribution
+# 
+# Output:
+# A data frame with the log prices and the log returns
+# 
+
+get.simulation <- function(df, numberofsimulation){
+  #initial price
+  S0 <- 200
+  
+  #simulate data from t distribution
+  r <- rt(numberofsimulation, df = df)
+  
+  #calculate the log prices
+  logprices <- log(S0) + cumsum(r)
+  
+  #calculate price of the stock
+  prices <- exp(logprices)
+  
+  #calculate the log returns
+  logreturns <- diff(logprices, lag = 1)
+  logreturns <- c(0, logreturns)
+  
+  #convert the data into a data frame
+  data <- data.frame(logprices, logreturns)
+  
+  return(data)
+}
+
+#create 1000 simulations with the degree of freedom set to 3
+Simulated_data <- get.simulation(3, 1000)
